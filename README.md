@@ -19,3 +19,23 @@ In progress
 
 ## Conclusion
 In progress
+
+## Installation
+
+```bash
+pip install .
+```
+
+## Package Usage
+
+```python
+import os
+
+from pm.dataset.dataloader import get_data_loaders
+from pm.model import ImageClassifier
+from pm.train_model import train_model
+
+train_loader, test_loader, dev_loader = get_data_loaders(
+    base_path=os.environ["PM_DATASET_PATH"]
+)
+```
