@@ -30,5 +30,6 @@ pip install .
 
 ```python
 from pm.dataset.dataloader import get_data_loaders
-from pm.model.model import ImageClassifier
+from pm.model import ImageClassifier
+from pm.train_model import train_model
 ```
