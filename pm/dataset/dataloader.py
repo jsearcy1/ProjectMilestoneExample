@@ -51,6 +51,10 @@ def get_data_loaders(base_path="/projects/dsci410_510/jakes_example", batch_size
     Args:
         base_path (string): Base path to the dataset
         batch_size (int): Batch size for the dataloaders
+
+    Notes:
+        Train and test images are loaded relative to ``base_path``. Development images
+        are loaded from the ``develop`` subdirectory referenced by ``develop.csv``.
     """
     train_dataset = CustomImageDataset(
         csv_file=os.path.join(base_path, "train.csv"),
