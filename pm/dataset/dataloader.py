@@ -6,6 +6,14 @@ from PIL import Image
 from torch.utils.data import DataLoader, Dataset
 from torchvision import transforms
 
+DEFAULT_TRANSFORM = transforms.Compose(
+    [
+        transforms.Resize((224, 224)),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ]
+)
+
 
 class CustomImageDataset(Dataset):
     def __init__(self, csv_file, img_dir, transform=None):
@@ -17,7 +25,7 @@ class CustomImageDataset(Dataset):
         """
         self.data_frame = pd.read_csv(csv_file)
         self.img_dir = img_dir
-        self.transform = transform if transform is not None else transforms.ToTensor()
+        self.transform = transform if transform is not None else DEFAULT_TRANSFORM
 
     def __len__(self):
         return len(self.data_frame)
@@ -44,30 +52,22 @@ def get_data_loaders(base_path="/projects/dsci410_510/jakes_example", batch_size
         base_path (string): Base path to the dataset
         batch_size (int): Batch size for the dataloaders
     """
-    transform = transforms.Compose(
-        [
-            transforms.Resize((224, 224)),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        ]
-    )
-
     train_dataset = CustomImageDataset(
         csv_file=os.path.join(base_path, "train.csv"),
         img_dir=base_path,
-        transform=transform,
+        transform=DEFAULT_TRANSFORM,
     )
 
     test_dataset = CustomImageDataset(
         csv_file=os.path.join(base_path, "test.csv"),
         img_dir=base_path,
-        transform=transform,
+        transform=DEFAULT_TRANSFORM,
     )
 
     dev_dataset = CustomImageDataset(
         csv_file=os.path.join(base_path, "develop.csv"),
         img_dir=os.path.join(base_path, "develop"),
-        transform=transform,
+        transform=DEFAULT_TRANSFORM,
     )
 
     train_loader = DataLoader(
