@@ -23,11 +23,3 @@ def train_model(train_loader, val_loader, test_loader, num_classes, max_epochs=1
     trainer.test(model, test_loader)
 
     return model
-
-
-if __name__ == "__main__":
-    from pm.dataset.dataloader import get_data_loaders
-
-    train_loader, test_loader, val_loader = get_data_loaders()
-    num_classes = 10
-    model = train_model(train_loader, val_loader, test_loader, num_classes)

@@ -44,18 +44,27 @@ class CustomImageDataset(Dataset):
         return image, label
 
 
-def get_data_loaders(base_path="/projects/dsci410_510/jakes_example", batch_size=32):
+def get_data_loaders(base_path=None, batch_size=32):
     """
     Create data loaders for train, test, and dev sets
 
     Args:
-        base_path (string): Base path to the dataset
+        base_path (string | None): Base path to the dataset. If not provided,
+            the ``PM_DATASET_PATH`` environment variable is used.
         batch_size (int): Batch size for the dataloaders
 
     Notes:
         Train and test images are loaded relative to ``base_path``. Dev images are
         loaded from the ``develop`` subdirectory referenced by ``develop.csv``.
     """
+    if base_path is None:
+        base_path = os.environ.get("PM_DATASET_PATH")
+
+    if not base_path:
+        raise ValueError(
+            "A dataset path is required. Pass base_path or set PM_DATASET_PATH."
+        )
+
     train_dataset = CustomImageDataset(
         csv_file=os.path.join(base_path, "train.csv"),
         img_dir=base_path,
@@ -96,12 +105,3 @@ def get_data_loaders(base_path="/projects/dsci410_510/jakes_example", batch_size
     )
 
     return train_loader, test_loader, dev_loader
-
-
-if __name__ == "__main__":
-    train_loader, test_loader, dev_loader = get_data_loaders()
-
-    for images, labels in train_loader:
-        print(f"Batch shape: {images.shape}")
-        print(f"Labels shape: {labels.shape}")
-        break
