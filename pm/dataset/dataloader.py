@@ -17,7 +17,6 @@ class CustomImageDataset(Dataset):
         """
         self.data_frame = pd.read_csv(csv_file)
         self.img_dir = img_dir
-        print(img_dir)
         self.transform = transform if transform is not None else transforms.ToTensor()
 
     def __len__(self):

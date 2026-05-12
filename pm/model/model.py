@@ -10,7 +10,7 @@ class ImageClassifier(pl.LightningModule):
     def __init__(self, num_classes, learning_rate=1e-3):
         super().__init__()
 
-        self.model = models.resnet50(pretrained=True)
+        self.model = models.resnet50(weights=models.ResNet50_Weights.DEFAULT)
 
         num_features = self.model.fc.in_features
         self.model.fc = nn.Linear(num_features, num_classes)
@@ -75,21 +75,15 @@ class ImageClassifier(pl.LightningModule):
 
 
 def train_model(train_loader, val_loader, test_loader, num_classes, max_epochs=10):
-    model = ImageClassifier(num_classes=num_classes)
+    from pm.train_model import train_model as package_train_model
 
-    trainer = pl.Trainer(
+    return package_train_model(
+        train_loader,
+        val_loader,
+        test_loader,
+        num_classes,
         max_epochs=max_epochs,
-        accelerator="auto",
-        devices=1,
-        enable_progress_bar=True,
-        enable_model_summary=True,
-        log_every_n_steps=10,
     )
-
-    trainer.fit(model, train_loader, val_loader)
-    trainer.test(model, test_loader)
-
-    return model
 
 
 if __name__ == "__main__":
